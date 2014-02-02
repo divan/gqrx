@@ -118,6 +118,7 @@ signals:
     void newLowCutFreq(int f);
     void newHighCutFreq(int f);
     void newFilterFreq(int low, int high);  /* substute for NewLow / NewHigh */
+    void getPeakFreq(qint64 f);
 
 public slots:
     // zoom functions
@@ -128,6 +129,7 @@ public slots:
     void setFftFill(bool enabled);
     void setPeakHold(bool enabled);
     void setPeakDetection(bool enabled, double c);
+    void setPeakAutoJump(bool enabled);
 
 protected:
     //re-implemented widget event handlers
@@ -228,6 +230,9 @@ private:
 
     double m_PeakDetection;
     QMap<int,int> m_Peaks;
+
+    bool m_PeakAutoJump;
+    qint64 m_PrevPeakFreq;
 };
 
 #endif // PLOTTER_H

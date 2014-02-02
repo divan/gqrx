@@ -132,6 +132,8 @@ CPlotter::CPlotter(QWidget *parent) :
 
     m_Peaks = QMap<int,int>();
     setPeakDetection(false, 2);
+    setPeakAutoJump(false);
+    m_PrevPeakFreq = 0;
 
     setFftPlotColor(QColor(0xFF,0xFF,0xFF,0xFF));
     setFftFill(false);
@@ -768,6 +770,26 @@ void CPlotter::draw()
                     lastPeak=-1;
                 }
             }
+
+            // Emit the clear signal peak from m_Peaks, if any
+            if (m_PeakAutoJump)
+            {
+                qint64 maxPeakFreq = 0, maxVal = 0;
+                foreach (int key, m_Peaks.keys()) {
+                    if (m_Peaks.value(key) > maxVal) {
+                        maxPeakFreq = freqFromX(key);
+                        maxVal = m_Peaks.value(key);
+                    }
+                }
+
+                // FIXME: 120 is an empirical value, need to
+                // find the universal way to detect strong signals
+                if (maxVal < 120 && maxPeakFreq != m_PrevPeakFreq) {
+                    emit newDemodFreq(maxPeakFreq, maxPeakFreq-m_CenterFreq);
+                    m_PrevPeakFreq = maxPeakFreq;
+                }
+            }
+
         }
 
         //Peak hold
@@ -1305,4 +1327,13 @@ void CPlotter::setPeakDetection(bool enabled, double c)
         m_PeakDetection=-1;
     else
         m_PeakDetection=c;
+}
+
+/*! \brief Set peak detection on or off.
+ *  \param enabled The new state of peak detection.
+ *  \param c Minimum distance of peaks from mean, in multiples of standard deviation.
+ */
+void CPlotter::setPeakAutoJump(bool enabled)
+{
+    m_PeakAutoJump=enabled;
 }

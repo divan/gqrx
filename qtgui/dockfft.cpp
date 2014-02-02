@@ -299,3 +299,9 @@ void DockFft::on_peakDetectionButton_toggled(bool checked)
 {
     emit peakDetectionToggled(checked);
 }
+
+/*! peakAutoJump button toggled */
+void DockFft::on_peakAutoJumpButton_toggled(bool checked)
+{
+    emit peakAutoJumpToggled(checked);
+}

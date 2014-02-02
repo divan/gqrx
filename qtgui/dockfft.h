@@ -60,6 +60,7 @@ signals:
     void fftFillToggled(bool fill);  /*! Toggle filling area under FFT plot. */
     void fftPeakHoldToggled(bool enable); /*! Toggle peak hold in FFT area. */
     void peakDetectionToggled(bool enabled); /*! Enable peak detection in FFT plot */
+    void peakAutoJumpToggled(bool enabled); /*! Enable auto jump to the strong peak. */
 
 private slots:
     void on_fftSizeComboBox_currentIndexChanged(const QString & text);
@@ -73,6 +74,7 @@ private slots:
     void on_fillButton_toggled(bool checked);
     void on_peakHoldButton_toggled(bool checked);
     void on_peakDetectionButton_toggled(bool checked);
+    void on_peakAutoJumpButton_toggled(bool checked);
 
 private:
     Ui::DockFft *ui;

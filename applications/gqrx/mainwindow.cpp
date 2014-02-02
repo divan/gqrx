@@ -188,6 +188,8 @@ MainWindow::MainWindow(const QString cfgfile, bool edit_conf, QWidget *parent) :
     connect(uiDockFft, SIGNAL(fftFillToggled(bool)), this, SLOT(setFftFill(bool)));
     connect(uiDockFft, SIGNAL(fftPeakHoldToggled(bool)), this, SLOT(setFftPeakHold(bool)));
     connect(uiDockFft, SIGNAL(peakDetectionToggled(bool)), this, SLOT(setPeakDetection(bool)));
+    connect(uiDockFft, SIGNAL(peakAutoJumpToggled(bool)), this, SLOT(setPeakAutoJump(bool)));
+    connect(ui->plotter, SIGNAL(getPeakFreq(qint64)), this, SLOT(setPeakFrequency(qint64)));
 
     connect(remote, SIGNAL(newFilterOffset(qint64)), this, SLOT(setFilterOffset(qint64)));
     connect(remote, SIGNAL(newFilterOffset(qint64)), uiDockRxOpt, SLOT(setFilterOffset(qint64)));
@@ -540,6 +542,18 @@ void MainWindow::updateGainStages()
     }
 
     uiDockInputCtl->setGainStages(gain_list);
+}
+
+/*! \brief Slot for receiving max peak frequency change signals.
+ *  \param[in] freq The new frequency.
+ *
+ *  It implemented as a slot to allow control max Peak
+ *  change action here in the future.
+ *
+ */
+void MainWindow::setPeakFrequency(qint64 rx_freq)
+{
+    emit setNewFrequency(rx_freq);
 }
 
 /*! \brief Slot for receiving frequency change signals.
@@ -1351,6 +1365,12 @@ void MainWindow::setPeakDetection(bool enabled)
 {
     ui->plotter->setPeakDetection(enabled ,2);
 }
+
+void MainWindow::setPeakAutoJump(bool enabled)
+{
+    ui->plotter->setPeakAutoJump(enabled);
+}
+
 
 /*! \brief Force receiver reconfiguration.
  *
