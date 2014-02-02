@@ -774,9 +774,9 @@ void CPlotter::draw()
             // Emit the clear signal peak from m_Peaks, if any
             if (m_PeakAutoJump)
             {
-                qint64 maxPeakFreq = 0, maxVal = 0;
+                qint64 maxPeakFreq = 0, maxVal = 255;
                 foreach (int key, m_Peaks.keys()) {
-                    if (m_Peaks.value(key) > maxVal) {
+                    if (m_Peaks.value(key) < maxVal) {
                         maxPeakFreq = freqFromX(key);
                         maxVal = m_Peaks.value(key);
                     }
